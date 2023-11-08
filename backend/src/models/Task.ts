@@ -10,11 +10,9 @@ enum TaskStatus {
 interface TaskType {
   title: string;
   description: string;
-  labels: string[];
   tags: string[];
   status: TaskStatus;
-  // users: string[];
-  // project: string[];
+  projectId: string;
 }
 
 const taskSchema = new mongoose.Schema({
@@ -25,9 +23,6 @@ const taskSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  labels: {
-    type: [String],
-  },
   tags: {
     type: [String],
   },
@@ -35,6 +30,9 @@ const taskSchema = new mongoose.Schema({
     type: String,
     enum: TaskStatus,
     default: TaskStatus.NotStarted,
+  },
+  projectId: {
+    type: String,
   },
 });
 

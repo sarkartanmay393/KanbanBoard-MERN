@@ -48,6 +48,7 @@ export default function Task({ id, index }: TCType) {
             <input name="task-title" className="text-[1.2rem] bg-transparent" value={task.name} onChange={handleOnChange} />
             <input name="task-description" className="text-[1rem] bg-transparent" value={task.content} multiple onChange={handleOnChange} />
           </div>
+          
         </div>
       }
     </Draggable>

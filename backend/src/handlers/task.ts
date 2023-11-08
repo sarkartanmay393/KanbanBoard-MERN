@@ -1,9 +1,5 @@
-import bcrypt from "bcryptjs";
-import User from "../models/User";
-import { ReqType, ResType } from "../types/index";
-import createSecretToken from "../utils/createSecretToken";
 import Task from "../models/Task";
-import { kMaxLength } from "buffer";
+import { type ReqType, type ResType } from "../types/index";
 
 const createTask = async (req: ReqType, res: ResType) => {
   const { title, description, labels, tags } = req.body;
@@ -22,21 +18,22 @@ const createTask = async (req: ReqType, res: ResType) => {
 };
 
 const updateTask = async (req: ReqType, res: ResType) => {
-  const { id } = req.params;
-  console.log(req.params);
-  const { title, description, labels, tags } = req.body;
+  const { id, title, description, labels, tags } = req.body;
 
   if (!id) {
     return res.json(`Error: no task id was passed`);
   }
 
   try {
-    const updatedTask = await Task.findByIdAndUpdate(id, {
-      title,
-      description,
-      labels,
-      tags,
-    });
+    const updatedTask = await Task.findByIdAndUpdate(
+      { _id: id },
+      {
+        title,
+        description,
+        labels,
+        tags,
+      }
+    );
 
     if (!updateTask) {
       return res.json(`Error: couldn't find the task`);

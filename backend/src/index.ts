@@ -1,5 +1,4 @@
-import cors from "cors";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 import express from "express";
 import cookie from "cookie-parser";
 dotenv.config();
@@ -8,23 +7,33 @@ import User from "./models/User";
 import connectDatabase from "./utils/connectDatabase";
 import { logIn, signUp } from "./handlers/auth";
 import { createTask, deleteTask, allTask } from "./handlers/task";
+import { fileURLToPath } from "url";
+import path from "path";
+import * as cors from "cors";
 
 const PORT = 8080 || process.env.PORT;
 const app = express();
 
-app.use(cors());
+app.use(cors.default());
 app.use(express.json());
 app.use(cookie());
+app.use(express.static(path.join(__dirname, "../public")));
+
+// Get request for all url other than '/api'
+app.get(/^(?!\/api).+/, (req, res) => {
+  console.log(req.url);
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 
 // Authentication
-app.post("/signup", signUp);
-app.post("/login", logIn);
+app.post("/api/signup", signUp);
+app.post("/api/login", logIn);
 
 // Task Management
-app.post("/task/create", createTask);
+app.post("/api/task/create", createTask);
 // app.put("/task/update/", updateTask);
-app.post("/task/delete", deleteTask);
-app.get("/task/all", allTask);
+app.post("/api/task/delete", deleteTask);
+app.get("/api/task/all", allTask);
 // app.post("/signup", signUp);
 // app.post("/login", logIn);
 
@@ -46,11 +55,7 @@ app.get("/task/all", allTask);
 //   });
 // });
 
-app.get("/", async (req, res) => {
-  return res.json("Welcome to Kanban Board Backend!");
-});
-
-app.get("/users", async (req, res) => {
+app.get("/api/users", async (req, res) => {
   const users = await User.find({});
   return res.json(users);
 });

@@ -4,6 +4,8 @@ interface UserType {
   username: string;
   email: string;
   password: string;
+  projectIds: string[];
+  taskIds: string[];
 }
 
 const userSchema = new mongoose.Schema({
@@ -20,6 +22,12 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  projectIds: {
+    type: [String],
+  },
+  taskIds: {
+    type: [String],
   },
 });
 
