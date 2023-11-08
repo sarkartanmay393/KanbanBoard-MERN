@@ -15,11 +15,11 @@ const store = createStore<GlobalStore>(globalStore);
 
 
 root.render(
-  <React.StrictMode>
-    <StoreProvider store={store}>
-      <App />
-    </StoreProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <StoreProvider store={store}>
+    <App />
+  </StoreProvider>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
