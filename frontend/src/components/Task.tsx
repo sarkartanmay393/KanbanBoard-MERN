@@ -89,7 +89,7 @@ export default function Task({ id, index }: TaskProps) {
       {provided =>
         <div
           ref={provided.innerRef}
-          className="flex flex-col gap-2 bg-blue-100 rounded-[6px] mx-4 p-2"
+          className="flex flex-col gap-2 bg-blue-100 rounded-[6px] mx-4 p-2 border border-black "
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
@@ -100,25 +100,23 @@ export default function Task({ id, index }: TaskProps) {
             alt="" />
           <div className="grid mt-[-10%]">
             <input name="title" placeholder="Implement User Auth"
-              className="focus:outline-0 focus:bg-pink-100 text-[1rem] lg:text-[1.2rem] font-[600] bg-transparent rounded-[6px] p-2 "
+              className="focus:outline-0 focus:bg-pink-100 text-[1rem] lg:text-[1.1rem] font-[600] bg-transparent rounded-[6px] p-2 "
               value={task.title} onChange={handleOnChange} />
             <textarea name="description" placeholder="Use next-auth or passport.js and go through docs"
-              className="focus:outline-0 focus:bg-pink-100 text-[0.8rem] lg:text-[1rem] bg-transparent rounded-[6px] p-2 " style={InputStyles} value={task.description} onChange={handleOnChange} />
+              className="focus:outline-0 focus:bg-pink-100 text-[0.8rem] lg:text-[0.9rem] bg-transparent rounded-[6px] p-2 " style={InputStyles} value={task.description} onChange={handleOnChange} />
           </div>
-          <div className="flex gap-2 ">
+          <div className="flex gap-2 justify-start items-center ">
 
-            <div id={`duedate-${task.id}`} onClick={handleDueDate} className="p-2 gap-1 flex items-center justify-center self-start rounded-[6px] min-w-[72px] min-h-[28px] bg-green-100 text-[0.8rem]">
+            <div id={`duedate-${task.id}`} onClick={handleDueDate} className="border border-black p-1 gap-1 flex items-center justify-center self-start rounded-[6px] min-w-[72px] h-[28px] bg-white text-[0.8rem]">
               <p className="flex justify-center items-center gap-1 font-[500]">
                 <span className="text-[0.4rem]">🔴</span> Due </p>
               <input id={`datepicker-${task.id}`}
                 className="border rounded bg-transparent focus:outline-none border-transparent focus:border-blue-500 "
                 name="duedate" type="date" value={task.dueDate} onChange={handleOnChange} />
-              {/* <p className="flex justify-center items-center gap-1 ">
-                <span className="text-[0.4rem]">🔴</span> Due <span className="font-[500] ">{`${task.dueDate ? task.dueDate.split('-')[2] : '_'}/${task.dueDate ? task.dueDate.split('-')[1] : '_'}`}</span></p> */}
             </div>
 
-            <div className="flex items-center justify-center self-start min-w-[72px] min-h-[28px] ">
-              <select name="taskstatus" className="p-2 w-[100%] h-[100%] bg-green-100 text-[0.8rem] font-[500] rounded-[6px]" value={task.status} onChange={handleOnChange}>
+            <div className="border border-black p-1 gap-1 flex items-center justify-center self-start rounded-[6px] min-w-[72px] h-[28px] bg-white text-[0.8rem]">
+              <select name="taskstatus" className="w-[100%] h-[100%] bg-transparent text-[0.8rem] font-[500] rounded-[6px]" value={task.status} onChange={handleOnChange}>
                 {Object.values(TaskStatus).map((status: string) => (
                   <option value={status} >{getTaskStatusPrettified(status, false)}</option>
                 ))}

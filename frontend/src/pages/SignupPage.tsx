@@ -67,8 +67,8 @@ export default function SignupPage() {
 
   return (
     <div className="flex items-center justify-center min-h-[100vh]">
-      <div className="grid p-4 w-full md:w-[50%] lg:w-[30%] rounded-[2px] border-[1px] border-solid border-black gap-2">
-        <h2 className="text-[3rem] font-[500] ">Signup</h2>
+      <div className="grid p-4 w-full md:w-[50%] lg:w-[30%] rounded-[2px] border-[1px] border-solid border-black gap-2 bg-green-100 mt-[-2rem]">
+        <h2 className="text-[3rem] font-[500] mt-[-0.6rem]">Signup</h2>
         <p className="text-[1rem] font-[400] ">Alreay got one! <a className="inline font-[500]" href="/login">Login here</a></p>
         <div className="grid gap-2">
           <input className="h-[36px] px-2 rounded-[2px] border-[1px] border-solid border-black" name="email" type="text" value={email} onChange={handleOnChange} placeholder="Type your Email" />
