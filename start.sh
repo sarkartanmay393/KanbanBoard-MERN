@@ -8,4 +8,4 @@ cd frontend && npm i && cd ..
 
 npm i -g concurrently
 
-concurrently "cd backend && npm run dev"  " cd frontend && npm start"
+concurrently "cd backend && npm run dev"  "cd frontend && npm start"

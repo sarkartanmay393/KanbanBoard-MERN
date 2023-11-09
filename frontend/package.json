@@ -8,7 +8,6 @@
     "@types/node": "^16.18.60",
     "@types/react": "^18.2.36",
     "@types/react-dom": "^18.2.14",
-    "axios": "^1.6.0",
     "easy-peasy": "^6.0.4",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",

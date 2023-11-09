@@ -17,7 +17,7 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 <p align="center">
-   .
+   Contains a task management dashboard with useful features including drag-and-drop.
    <br />
    <a href="https://github.com/sarkartanmay393/
 KanbanBoard-MERN"><strong>Explore Code »</strong></a>
@@ -128,7 +128,9 @@ Running a development environment for this project will be the easiest thing in 
   ```zsh
   docker compose up
   ```
+
   OR
+
 - Run the following command to start using `concurrently`
 
   ```zsh
