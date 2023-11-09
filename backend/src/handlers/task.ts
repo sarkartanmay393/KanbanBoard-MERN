@@ -36,7 +36,7 @@ const updateTask = async (req: ReqTypeArrayBody, res: ResType) => {
 
   try {
     const updatedTask = await Task.findByIdAndUpdate(payload._id, payload);
-    if (!updateTask) {
+    if (!updatedTask) {
       return res.status(500).json(`Error: couldn't find the task`);
     }
     return res.json("payload updated succesfully"!);
@@ -49,15 +49,13 @@ const updateTask = async (req: ReqTypeArrayBody, res: ResType) => {
 const deleteTask = async (req: ReqType, res: ResType) => {
   const { userid } = req.headers;
   const { id } = req.body;
-  // authtoken is user id
-  const { authtoken } = req.headers;
 
   if (!id) {
     return res.json(`Error: no task id was passed`);
   }
 
   try {
-    const user = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       { _id: userid },
       {
         $pull: {
@@ -69,7 +67,6 @@ const deleteTask = async (req: ReqType, res: ResType) => {
     if (!deletedTask) {
       return res.json(`Error: couldn't find the task`);
     }
-    // await User.findByIdAndUpdate;
 
     return res.json(deletedTask);
   } catch (error) {
@@ -89,6 +86,7 @@ const allTask = async (req: ReqType, res: ResType) => {
       if (assignedTaskIds.includes(task.id)) {
         return task;
       }
+      return;
     });
 
     return res.json(accessedTasks);

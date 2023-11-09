@@ -1,9 +1,9 @@
-import bcrypt from "bcryptjs";
+import * as bcrypt from "bcryptjs";
 import User from "../models/User";
 import { ReqType, ResType } from "../types/index";
 import createSecretToken from "../utils/createSecretToken";
 
-const logOut = async (req: ReqType, res: ResType) => {
+const logOut = async (_: ReqType, res: ResType) => {
   try {
     res.clearCookie("token");
     console.log(`Logout successful!`);

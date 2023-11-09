@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 import { NextFunction } from "express";
 import { ReqType, ResType } from "../types";
 import { JWT_SECRET } from "../utils/getEnv";
@@ -20,4 +20,6 @@ export default async (req: ReqType, res: ResType, next: NextFunction) => {
     res.clearCookie("token");
     return res.status(401).send(`${err}`);
   }
+
+  return res.status(500);
 };

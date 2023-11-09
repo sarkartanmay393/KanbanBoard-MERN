@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import createSecretToken from "../utils/createSecretToken";
 
 interface UserType {
   username: string;
