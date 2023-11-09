@@ -8,3 +8,4 @@ const getEnvValue = (key: string) => {
 
 export const JWT_SECRET = getEnvValue("JWT");
 export const PORT = getEnvValue("PORT");
+export const MONGODB = getEnvValue("MONGODB");
