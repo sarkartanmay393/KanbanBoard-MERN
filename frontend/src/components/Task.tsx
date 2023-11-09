@@ -1,54 +1,136 @@
 import { ChangeEvent } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { useStoreState } from "../state/typedHooks";
+import { useStoreActions, useStoreState } from "../state/typedHooks";
+import { TaskStatus } from "../interfaces";
 
-interface TCType {
+interface TaskProps {
   id: string;
   index: number;
 }
 
-export default function Task({ id, index }: TCType) {
-  const task = useStoreState(state => state.tasks.find((task) => task.id === id));
+const InputStyles: React.CSSProperties = {
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    //   e.preventDefault();
+};
 
-    //   setStateData(prevStateData => {
-    //     if (e.target.name === 'task-title') {
-    //       return
-    //     }
-  }
-
-
-  //     return prevStateData
-  // })
-
-  // switch (e.target.name) {
-  //   case "task-title": {
-  //     setStateData(prevStateData => {
-  //       return { ...prevStateData, e. };
-  //      })
-  //    }
-  // }
-
+export default function Task({ id, index }: TaskProps) {
+  const task = useStoreState((state) => state.tasks.find((task) => task.id === id));
+  const { updateTask, removeOneTask } = useStoreActions((action) => action)
   if (!task) {
-    return <></>
+    return <></>;
   }
+
+  const handleOnChange = (e:
+    ChangeEvent<HTMLTextAreaElement>
+    | ChangeEvent<HTMLInputElement>
+    | ChangeEvent<HTMLSelectElement>
+  ) => {
+    switch (e.target.name) {
+      case "title": {
+        updateTask({
+          ...task,
+          title: e.target.value,
+        })
+        break;
+      }
+      case "description": {
+        updateTask({
+          ...task,
+          description: e.target.value,
+        })
+        break;
+      }
+      case "duedate": {
+        updateTask({
+          ...task,
+          dueDate: e.target.value,
+        });
+        break;
+      }
+      case "taskstatus": {
+        updateTask({
+          ...task,
+          status: getTaskStatusPrettified(e.target.value, true) as TaskStatus,
+        });
+        break;
+      }
+    }
+  }
+
+  const handleDelete = () => {
+    removeOneTask(task.id);
+  }
+
+  const handleDueDate = () => {
+
+  }
+
+  const getTaskStatusPrettified = (ts: string, getEnum: boolean): TaskStatus | string => {
+    switch (ts) {
+      case 'notstarted': {
+        return getEnum ? TaskStatus.NotStarted : "Not Started";
+      }
+      case 'inprogress': {
+        return getEnum ? TaskStatus.InProgress : "In Progress";
+      }
+      case 'review': {
+        return getEnum ? TaskStatus.Review : "Review";
+      }
+      case 'complete': {
+        return getEnum ? TaskStatus.Complete : "Complete";
+      }
+      default:
+        return getEnum ? TaskStatus.NotStarted : 'No Started';
+    }
+  }
+
 
   return (
     <Draggable draggableId={task.id} index={index}>
       {provided =>
         <div
           ref={provided.innerRef}
-          className="flex flex-col gap-2 bg-blue-100 min-h-[128px] bordesr-[1px] border-solid border-black rounded-[6px] mx-4 my-2"
+          className="flex flex-col gap-2 bg-blue-100 rounded-[6px] mx-4 p-2"
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div className="grid border-[1px] border-solid border-black">
-            <input name="task-title" className="text-[1.2rem] bg-transparent" value={task.name} onChange={handleOnChange} />
-            <input name="task-description" className="text-[1rem] bg-transparent" value={task.content} multiple onChange={handleOnChange} />
+          <img
+            onClick={handleDelete}
+            className="relative md:self-end border-[2px] border-solid border-solid rounded-[6px] mt-2 cursor-pointer "
+            width={20} src="https://www.svgrepo.com/show/21045/delete-button.svg"
+            alt="" />
+          <div className="grid mt-[-10%]">
+            <input name="title" placeholder="Implement User Auth"
+              className="focus:outline-0 focus:bg-pink-100 text-[1rem] lg:text-[1.2rem] font-[600] bg-transparent rounded-[6px] p-2 "
+              value={task.title} onChange={handleOnChange} />
+            <textarea name="description" placeholder="Use next-auth or passport.js and go through docs"
+              className="focus:outline-0 focus:bg-pink-100 text-[0.8rem] lg:text-[1rem] bg-transparent rounded-[6px] p-2 " style={InputStyles} value={task.description} onChange={handleOnChange} />
           </div>
-          
+          <div className="flex gap-2 ">
+
+            <div id={`duedate-${task.id}`} onClick={handleDueDate} className="p-2 gap-1 flex items-center justify-center self-start rounded-[6px] min-w-[72px] min-h-[28px] bg-green-100 text-[0.8rem]">
+              <p className="flex justify-center items-center gap-1 font-[500]">
+                <span className="text-[0.4rem]">🔴</span> Due </p>
+              <input id={`datepicker-${task.id}`}
+                className="border rounded bg-transparent focus:outline-none border-transparent focus:border-blue-500 "
+                name="duedate" type="date" value={task.dueDate} onChange={handleOnChange} />
+              {/* <p className="flex justify-center items-center gap-1 ">
+                <span className="text-[0.4rem]">🔴</span> Due <span className="font-[500] ">{`${task.dueDate ? task.dueDate.split('-')[2] : '_'}/${task.dueDate ? task.dueDate.split('-')[1] : '_'}`}</span></p> */}
+            </div>
+
+            <div className="flex items-center justify-center self-start min-w-[72px] min-h-[28px] ">
+              <select name="taskstatus" className="p-2 w-[100%] h-[100%] bg-green-100 text-[0.8rem] font-[500] rounded-[6px]" value={task.status} onChange={handleOnChange}>
+                {Object.values(TaskStatus).map((status: string) => (
+                  <option value={status} >{getTaskStatusPrettified(status, false)}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* <div className="flex items-center justify-center p-2 self-start rounded-[6px] min-w-[72px] min-h-[28px] bg-green-100 text-[0.8rem]">
+              {task.tags.map((tag) =>
+                <p key={tag} className="italic ">{`#${tag}`}</p>
+              )}
+            </div> */}
+          </div>
         </div>
       }
     </Draggable>

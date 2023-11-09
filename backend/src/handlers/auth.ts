@@ -3,6 +3,16 @@ import User from "../models/User";
 import { ReqType, ResType } from "../types/index";
 import createSecretToken from "../utils/createSecretToken";
 
+const logOut = async (req: ReqType, res: ResType) => {
+  try {
+    res.clearCookie("token");
+    console.log(`Logout successful!`);
+    return res.json(`Come back soon!`);
+  } catch (error) {
+    return res.status(401).json(`${error}`);
+  }
+};
+
 const signUp = async (req: ReqType, res: ResType) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -17,12 +27,6 @@ const signUp = async (req: ReqType, res: ResType) => {
       password: hashedPassword,
     });
     const savedUser = await user.save();
-    console.log(savedUser);
-
-    const token = createSecretToken(user.password);
-    res.cookie("token", token, {
-      maxAge: 8640000,
-    });
 
     return res.json(savedUser.id);
   } catch (error) {
@@ -32,7 +36,7 @@ const signUp = async (req: ReqType, res: ResType) => {
 
 const logIn = async (req: ReqType, res: ResType) => {
   const { email, password } = req.body;
-  console.log(req.body);
+
   if (!email || !password) {
     return res.status(301).json("email not found");
   }
@@ -52,17 +56,16 @@ const logIn = async (req: ReqType, res: ResType) => {
       return res.status(401).json("Invalid password");
     }
 
-    const token = createSecretToken(user.password);
-    res.cookie("token", token, {
-      maxAge: 8640000,
-    });
+    //Send the jwt token on successful login
+    const token = createSecretToken(user.id);
+    res.cookie("token", token, { signed: undefined });
 
     console.log(`Login successful! (${user.username})`);
-    return res.json(user.id);
+    return res.json(user);
   } catch (error) {
     console.log(error);
     return res.json(`error: ${error}`);
   }
 };
 
-export { signUp, logIn };
+export { signUp, logIn, logOut };

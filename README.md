@@ -23,7 +23,7 @@
 KanbanBoard-MERN"><strong>Explore Code »</strong></a>
    <br />
    <br />
-   <a href="http://192.46.213.243/" target="_blank" rel="noopener noreferrer" >View Demo</a>
+   <a href="https://taskmanagerkb.onrender.com/" target="_blank" rel="noopener noreferrer" >View Demo</a>
    ·
    <a href="https://github.com/sarkartanmay393/KanbanBoard-MERN/
 issues">Report Bug</a>
@@ -93,26 +93,14 @@ issues">Request Feature</a>
 
 ### Screenshots
 
-<details>
+~none
+
+<!-- <details>
    <summary><strong>Show</strong> </summary>
 
 <div style="text-align: center;"> <strong><i>Highland Room Outlook</i></strong></div>
 
-![Hinghland Rooms](static/screenshots/highend-room-page.png "Highend Room Page")
-
-<div style="text-align: center;"> <strong><i>Reservation Form Page</i></strong></div>
-
-![](static/screenshots/reservation-form-page.png "Reservation Form Page")
-
-<div style="text-align: center;"> <strong><i>Reservation Summary Page</i></strong></div>
-
-![](static/screenshots/reservation-summary-page.png "Reservation Summary Page")
-
-<div style="text-align: center;"> <strong><i>Reservation Email Outlook</i></strong></div>
-
-![](web/email-template/email-outlook.png "Reservation Email Outlook")
-
-</details>
+![Hinghland Rooms](static/screenshots/highend-room-page.png "Highend Room Page") -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -124,6 +112,7 @@ Running a development environment for this project will be the easiest thing in 
 
 ### Prerequisites
 
+- [**Node**](https://nodejs.org/en/)
 - [**Docker**](https://www.docker.com)
 
 ### Steps to run
@@ -139,11 +128,12 @@ Running a development environment for this project will be the easiest thing in 
   ```zsh
   docker compose up
   ```
-
-- Execute `web` container on terminal
+  OR
+- Run the following command to start using `concurrently`
 
   ```zsh
-  docker exec -it web bash
+  chmod +x start.sh
+  /.start.sh
   ```
 
 <br />

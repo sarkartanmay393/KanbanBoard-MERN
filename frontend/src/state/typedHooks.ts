@@ -1,5 +1,5 @@
 import { createTypedHooks } from "easy-peasy";
-import { GlobalStore } from "../interfaces";
+import { IGlobalStore } from "../interfaces";
 
-const typedHooks = createTypedHooks<GlobalStore>();
+const typedHooks = createTypedHooks<IGlobalStore>();
 export const { useStoreState, useStoreActions, useStoreDispatch } = typedHooks;

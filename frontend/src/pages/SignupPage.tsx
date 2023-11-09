@@ -1,6 +1,6 @@
-import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useStoreActions } from "../state/typedHooks";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -8,6 +8,8 @@ export default function SignupPage() {
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const { setUser } = useStoreActions((action) => (action));
+
 
   const handleSubmit = async () => {
     setError("");
@@ -18,6 +20,8 @@ export default function SignupPage() {
       password: password,
     });
 
+    setUser(null);
+
     try {
       const response = await fetch('/api/signup', {
         method: 'POST',
@@ -27,11 +31,10 @@ export default function SignupPage() {
         body: credentials,
       });
 
-      const respBody: string = await response.json();
-      console.log(respBody);
+      const resp = await response.json();
 
       if (response.status === 401) {
-        setError(respBody);
+        setError(resp);
       } else {
         setEmail("");
         setPassword("");

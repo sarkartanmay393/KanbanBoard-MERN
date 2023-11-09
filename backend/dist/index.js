@@ -36,6 +36,7 @@ const auth_1 = require("./handlers/auth");
 const task_1 = require("./handlers/task");
 const path_1 = __importDefault(require("path"));
 const cors = __importStar(require("cors"));
+const verifyAuth_1 = __importDefault(require("./middlewares/verifyAuth"));
 const PORT = 8080 || process.env.PORT;
 const app = (0, express_1.default)();
 app.use(cors.default());
@@ -44,35 +45,18 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.static(path_1.default.join(__dirname, "../public")));
 // Get request for all url other than '/api'
 app.get(/^(?!\/api).+/, (req, res) => {
-    console.log(req.url);
     res.sendFile(path_1.default.join(__dirname, "../public/index.html"));
 });
 // Authentication
 app.post("/api/signup", auth_1.signUp);
 app.post("/api/login", auth_1.logIn);
+app.get("/api/logout", auth_1.logOut);
+app.use(verifyAuth_1.default);
 // Task Management
 app.post("/api/task/create", task_1.createTask);
-// app.put("/task/update/", updateTask);
+app.post("/api/task/update/", task_1.updateTask);
 app.post("/api/task/delete", task_1.deleteTask);
 app.get("/api/task/all", task_1.allTask);
-// app.post("/signup", signUp);
-// app.post("/login", logIn);
-// app.use(async (req: ReqType, res: ResType, next: NextFunction) => {
-//   const { token } = req.cookies as { token: string };
-//   if (!token) {
-//     return res.json({ status: false });
-//   }
-//   jwt.verify(token, JWT_SECRET, async (err, data) => {
-//     if (err) {
-//       return res.json({ status: false });
-//     } else {
-//       const user = await User.findById(data);
-//       if (user) {
-//         next();
-//       } else return res.json({ status: false });
-//     }
-//   });
-// });
 app.get("/api/users", async (req, res) => {
     const users = await User_1.default.find({});
     return res.json(users);

@@ -1,0 +1,44 @@
+# Use the official Node.js image as the base image for the backend
+FROM node:14 as backend
+
+# Create and set the working directory for the backend
+WORKDIR /app/backend
+
+# Copy the package.json and package-lock.json for the backend
+COPY /backend/package*.json ./
+
+# Install backend dependencies
+RUN npm install
+
+# Copy the backend code into the container
+COPY /backend ./
+
+# Expose the port for the backend
+EXPOSE 8080
+
+# Start the backend server
+CMD ["node", "src/index.ts"]
+
+# Use the official Node.js image as the base image for the frontend
+FROM node:14 as frontend
+
+# Create and set the working directory for the frontend
+WORKDIR /app/frontend
+
+# Copy the package.json and package-lock.json for the frontend
+COPY /frontend/package*.json ./
+
+# Install frontend dependencies
+RUN npm install
+
+# Copy the frontend code into the container
+COPY /frontend ./
+
+# Build the React frontend
+RUN npm run build
+
+# Expose the port for the frontend
+EXPOSE 3000
+
+# Start the frontend server
+CMD ["npm", "start"]

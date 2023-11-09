@@ -13,12 +13,12 @@ interface TaskType {
   tags: string[];
   status: TaskStatus;
   projectId: string;
+  dueDate: string;
 }
 
 const taskSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
   },
   description: {
     type: String,
@@ -32,6 +32,9 @@ const taskSchema = new mongoose.Schema({
     default: TaskStatus.NotStarted,
   },
   projectId: {
+    type: String,
+  },
+  dueDate: {
     type: String,
   },
 });

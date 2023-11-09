@@ -1,12 +1,12 @@
 import React from "react";
 import { DroppableProvided } from "react-beautiful-dnd";
 
-interface TaskListType {
+interface TaskListProps {
   provided: DroppableProvided;
   children: React.ReactElement;
 }
 
-export default function TaskList({ provided, children }: TaskListType) {
+export default function TaskList({ provided, children }: TaskListProps) {
   return (
     <div
       ref={provided.innerRef}
