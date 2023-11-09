@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
-import { MONGODB } from "./getEnv";
+
+const uri =
+  `mongodb+srv://tanmaysrkr:e9HXXHeZzN5c95EE@cluster0.eucuekw.mongodb.net/?retryWrites=true&w=majority`;
 
 const connectDatabase = async (callbackfn: Function) => {
   try {
-    await mongoose.connect(MONGODB, {
+    await mongoose.connect(uri, {
       dbName: "KanbanBoard",
     });
     console.log(`Databased Connected!`);

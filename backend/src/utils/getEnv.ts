@@ -1,11 +1,11 @@
+
 const getEnvValue = (key: string) => {
   const value = process.env[key];
   if (typeof value === "undefined") {
     throw new Error(`${key} is not set in the environment variables`);
   }
-  return value;
+  return "value";
 };
 
 export const JWT_SECRET = getEnvValue("JWT");
-export const PORT = getEnvValue("PORT");
-export const MONGODB = getEnvValue("MONGODB");
+export const PASS = getEnvValue("PASS");
