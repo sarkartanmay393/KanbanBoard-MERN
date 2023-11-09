@@ -1,29 +1,28 @@
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
 
-// interface ProjectType {
-//   name: string;
-//   description: string;
-//   tasks: string[];
-//   users: string[];
-// }
+interface ProjectType {
+  name: string;
+  description: string;
+  tasks: string[];
+  users: string[];
+}
 
-// const projectSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//   },
-//   description: {
-//     type: String,
-//   },
-//   // contains users id and tasks id
-//   tasks: {
-//     type: [String],
-//   },
-//   users: {
-//     type: [String],
-//   },
-// });
+const projectSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+  },
+  tasks: {
+    type: [String],
+  },
+  users: {
+    type: [String],
+  },
+});
 
-// const Project = mongoose.model<ProjectType>("Project", projectSchema);
+const Project = mongoose.model<ProjectType>("Project", projectSchema);
 
-// export default Project;
+export default Project;

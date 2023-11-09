@@ -12,7 +12,12 @@ function App() {
 
   return (
     <div className="overflow-hidden w-[100vw] h-[100vh] flex flex-col p-4 bg-gray-100">
-      <img className="absolute left-8 top-6 cursor-pointer" width={24} alt="" onClick={handleGoBack} src="https://cdn1.iconfinder.com/data/icons/duotone-essentials/24/chevron_backward-512.png" />
+      <img
+        alt=""
+        width={24}
+        onClick={handleGoBack}
+        className="absolute left-8 top-6 cursor-pointer"
+        src="https://cdn1.iconfinder.com/data/icons/duotone-essentials/24/chevron_backward-512.png" />
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomePage />} />

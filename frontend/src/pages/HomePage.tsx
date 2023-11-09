@@ -13,16 +13,7 @@ export default function HomePage() {
   const navigateTo = useNavigate();
 
   const handleNewTask = () => {
-    const defaultTask = {
-      id: "",
-      title: "",
-      description: "",
-      tags: [""],
-      status: TaskStatus.NotStarted,
-      projectId: "",
-      dueDate: "",
-    }
-    addOneTask(defaultTask);
+    addOneTask();
   }
 
   useEffect(() => {
@@ -76,7 +67,7 @@ export default function HomePage() {
       <img className="absolute right-8 top-6 cursor-pointer" width={24} alt="" onClick={handleLogout} src="https://www.svgrepo.com/show/135250/logout.svg" />
       <h3 className="text-[2.4rem] font-[500] ">Personal Board</h3>
       <p className="text-[1rem] font-[500] ">Manage your daily/weekly tasks here.</p>
-      <img onClick={handleNewTask} className="border-[0.1px] border-solid border-gray-400 rounded-[6px] my-4 cursor-pointer p-1" width={36} src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Plus_symbol.svg/500px-Plus_symbol.svg.png" alt="" style={{boxShadow: '1px 0.4px 4px 0.3px lightgreen'}} />
+      <img onClick={handleNewTask} className="border-[0.1px] border-solid border-gray-400 rounded-[6px] my-4 cursor-pointer p-1" width={36} src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Plus_symbol.svg/500px-Plus_symbol.svg.png" alt="" style={{ boxShadow: '1px 0.4px 4px 0.3px lightgreen' }} />
       {isLoading ? <LoadingSpinner loading={Boolean(isLoading)} /> : <Board styleProps={DefaultBoardProps} />}
     </div>
   )

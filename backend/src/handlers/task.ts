@@ -24,7 +24,7 @@ const createTask = async (req: ReqType, res: ResType) => {
         },
       }
     );
-    console.log(user?.taskIds);
+
     return res.json(savedTask.id);
   } catch (error) {
     return res.status(500).json(error);
@@ -48,9 +48,9 @@ const updateTask = async (req: ReqTypeArrayBody, res: ResType) => {
 
 const deleteTask = async (req: ReqType, res: ResType) => {
   const { userid } = req.headers;
-  const { id } = req.body;
+  const { _id } = req.body;
 
-  if (!id) {
+  if (!_id) {
     return res.json(`Error: no task id was passed`);
   }
 
@@ -59,11 +59,11 @@ const deleteTask = async (req: ReqType, res: ResType) => {
       { _id: userid },
       {
         $pull: {
-          taskIds: id,
+          taskIds: _id,
         },
       }
     );
-    const deletedTask = await Task.findByIdAndDelete({ _id: id });
+    const deletedTask = await Task.findByIdAndDelete({ _id: _id });
     if (!deletedTask) {
       return res.json(`Error: couldn't find the task`);
     }
@@ -78,18 +78,11 @@ const allTask = async (req: ReqType, res: ResType) => {
   const { userid } = req.headers;
 
   const user = await User.findById({ _id: userid });
-  const allTasks = await Task.find({});
-  const assignedTaskIds = user?.taskIds;
+  const taskIds = user?.taskIds as string[];
+  const tasksDBdata = await Task.find({ _id: { $in: taskIds } });
 
-  if (assignedTaskIds) {
-    const accessedTasks = allTasks.map((task) => {
-      if (assignedTaskIds.includes(task.id)) {
-        return task;
-      }
-      return;
-    });
-
-    return res.json(accessedTasks);
+  if (tasksDBdata) {
+    return res.json(tasksDBdata);
   }
 
   return res.status(500).json(`couldn't find your associate tasks`);

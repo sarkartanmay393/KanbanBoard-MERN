@@ -3,12 +3,13 @@ import express from "express";
 import cookie from "cookie-parser";
 dotenv.config();
 
-import User from "./models/User";
-import connectDatabase from "./utils/connectDatabase";
-import { logIn, logOut, signUp } from "./handlers/auth";
-import { createTask, deleteTask, allTask, updateTask } from "./handlers/task";
 import path from "path";
 import * as cors from "cors";
+
+import { createTask, deleteTask, allTask, updateTask } from "./handlers/task";
+import User from "./models/User";
+import connectDatabase from "./utils/connectDatabase";
+import { logIn, logOut, signUp, update } from "./handlers/auth";
 import verifyAuth from "./middlewares/verifyAuth";
 import { ResType } from "./types";
 
@@ -28,9 +29,11 @@ app.get(/^(?!\/api).+/, (_, res: ResType) => {
 // Authentication
 app.post("/api/signup", signUp);
 app.post("/api/login", logIn);
-app.get("/api/logout", logOut);
 
 app.use(verifyAuth);
+
+app.get("/api/update", update);
+app.get("/api/logout", logOut);
 
 // Task Management
 app.post("/api/task/create", createTask);

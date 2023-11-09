@@ -3,6 +3,17 @@ import User from "../models/User";
 import { ReqType, ResType } from "../types/index";
 import createSecretToken from "../utils/createSecretToken";
 
+const update = async (req: ReqType, res: ResType) => {
+  const { userid } = req.headers;
+  const { username, email, password, taskIds, projectIds } = req.body;
+
+  try {
+    return res.json();
+  } catch (error) {
+    return res.status(401).json(`${error}`);
+  }
+};
+
 const logOut = async (_: ReqType, res: ResType) => {
   try {
     res.clearCookie("token");
@@ -28,7 +39,7 @@ const signUp = async (req: ReqType, res: ResType) => {
     });
     const savedUser = await user.save();
 
-    return res.json(savedUser.id);
+    return res.json(savedUser);
   } catch (error) {
     return res.status(401).json(`${error}`);
   }
@@ -68,4 +79,4 @@ const logIn = async (req: ReqType, res: ResType) => {
   }
 };
 
-export { signUp, logIn, logOut };
+export { signUp, logIn, logOut, update };

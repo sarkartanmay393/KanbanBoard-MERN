@@ -15,7 +15,7 @@ export default function Board({ styleProps }: BoardProps) {
     <div id="board" className='h-[100%] grid grid-cols-4 gap-2 m-4 px-4' style={styleProps}>
       <DragDropContext onDragEnd={handleDragEnd}>
         {columnOrder.map((columnId) => {
-          const column = columns.find((column) => column.id === columnId);
+          const column = columns[columnId];
           return column && <Column key={columnId} {...column} />
         })}
       </DragDropContext>

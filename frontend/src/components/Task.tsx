@@ -4,20 +4,14 @@ import { useStoreActions, useStoreState } from "../state/typedHooks";
 import { TaskStatus } from "../interfaces";
 
 interface TaskProps {
-  id: string;
+  _id: string;
   index: number;
 }
 
-const InputStyles: React.CSSProperties = {
-
-};
-
-export default function Task({ id, index }: TaskProps) {
-  const task = useStoreState((state) => state.tasks.find((task) => task.id === id));
+export default function Task({ _id, index }: TaskProps) {
   const { updateTask, removeOneTask } = useStoreActions((action) => action)
-  if (!task) {
-    return <></>;
-  }
+  const task = useStoreState((state) => state.tasks.find((task) => task._id === _id));
+  if (!task) { return <></> }
 
   const handleOnChange = (e:
     ChangeEvent<HTMLTextAreaElement>
@@ -57,11 +51,7 @@ export default function Task({ id, index }: TaskProps) {
   }
 
   const handleDelete = () => {
-    removeOneTask(task.id);
-  }
-
-  const handleDueDate = () => {
-
+    removeOneTask(task._id);
   }
 
   const getTaskStatusPrettified = (ts: string, getEnum: boolean): TaskStatus | string => {
@@ -85,7 +75,7 @@ export default function Task({ id, index }: TaskProps) {
 
 
   return (
-    <Draggable draggableId={task.id} index={index}>
+    <Draggable draggableId={task._id} index={index}>
       {provided =>
         <div
           ref={provided.innerRef}
@@ -103,31 +93,28 @@ export default function Task({ id, index }: TaskProps) {
               className="focus:outline-0 focus:bg-pink-100 text-[1rem] lg:text-[1.1rem] font-[600] bg-transparent rounded-[6px] p-2 "
               value={task.title} onChange={handleOnChange} />
             <textarea name="description" placeholder="Use next-auth or passport.js and go through docs"
-              className="focus:outline-0 focus:bg-pink-100 text-[0.8rem] lg:text-[0.9rem] bg-transparent rounded-[6px] p-2 " style={InputStyles} value={task.description} onChange={handleOnChange} />
+              className="focus:outline-0 focus:bg-pink-100 text-[0.8rem] lg:text-[0.9rem] bg-transparent rounded-[6px] p-2 "
+              style={{}} value={task.description} onChange={handleOnChange} />
           </div>
           <div className="flex gap-2 justify-start items-center ">
 
-            <div id={`duedate-${task.id}`} onClick={handleDueDate} className="border border-black p-1 gap-1 flex items-center justify-center self-start rounded-[6px] min-w-[72px] h-[28px] bg-white text-[0.8rem]">
+            <div className="border border-black p-1 gap-1 flex items-center justify-center self-start rounded-[6px] min-w-[72px] h-[28px] bg-white text-[0.8rem]">
               <p className="flex justify-center items-center gap-1 font-[500]">
                 <span className="text-[0.4rem]">🔴</span> Due </p>
-              <input id={`datepicker-${task.id}`}
+              <input id={`datepicker-${task._id}`}
                 className="border rounded bg-transparent focus:outline-none border-transparent focus:border-blue-500 "
                 name="duedate" type="date" value={task.dueDate} onChange={handleOnChange} />
             </div>
 
             <div className="border border-black p-1 gap-1 flex items-center justify-center self-start rounded-[6px] min-w-[72px] h-[28px] bg-white text-[0.8rem]">
-              <select name="taskstatus" className="w-[100%] h-[100%] bg-transparent text-[0.8rem] font-[500] rounded-[6px]" value={task.status} onChange={handleOnChange}>
+              <select name="taskstatus" className="w-[100%] h-[100%] bg-transparent text-[0.8rem] font-[500] rounded-[6px]"
+                value={task.status} onChange={handleOnChange}>
                 {Object.values(TaskStatus).map((status: string) => (
                   <option value={status} >{getTaskStatusPrettified(status, false)}</option>
                 ))}
               </select>
             </div>
 
-            {/* <div className="flex items-center justify-center p-2 self-start rounded-[6px] min-w-[72px] min-h-[28px] bg-green-100 text-[0.8rem]">
-              {task.tags.map((tag) =>
-                <p key={tag} className="italic ">{`#${tag}`}</p>
-              )}
-            </div> */}
           </div>
         </div>
       }

@@ -7,8 +7,8 @@ export enum TaskStatus {
   Complete = "complete",
 }
 
-export interface IPair {
-  [key: string]: string;
+export interface IPair<T> {
+  [key: string]: T;
 }
 
 export interface IUser {
@@ -20,7 +20,7 @@ export interface IUser {
 }
 
 export interface ITask {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   tags: string[];
@@ -30,51 +30,36 @@ export interface ITask {
 }
 
 export interface IColumn {
-  id: string;
+  _id: string;
   name: string;
-  taskIds: string[];
   relatedStatus: TaskStatus;
 }
 
-interface addTaskToColumnPayload {
-  status: TaskStatus;
-  columnId: string;
-}
-
-export interface IUser {
-  id: string;
-  email: string;
-  username: string;
-  taskIds: string[];
-  projectIds: string[];
-}
-
 export interface IGlobalStore {
+  // state variables
   isLoading: Boolean;
   error: string;
   user: IUser | null;
   tasks: ITask[];
-  columns: IColumn[];
-  columnOrder: string[];
+  readonly columns: IPair<IColumn>;
+  readonly columnOrder: string[];
 
+  // data fetching
   setIsLoading: Action<IGlobalStore, boolean>;
   setError: Action<IGlobalStore, string>;
   setUser: Action<IGlobalStore, IUser | null>;
   setTasks: Action<IGlobalStore, ITask[]>;
-  setColumns: Action<IGlobalStore, IColumn[]>;
-  setColumnOrder: Action<IGlobalStore, string[]>;
 
-  addOneTask: Action<IGlobalStore, ITask>;
+  // Task management
+  addOneTask: Action<IGlobalStore>;
   removeOneTask: Action<IGlobalStore, string>;
   updateTask: Action<IGlobalStore, ITask>;
 
-  addTaskToColumn: Action<IGlobalStore, addTaskToColumnPayload>;
-
-  // syncStateData: Action<IGlobalStore>;
+  //  utils
 }
 
-export interface IWebWorker {
-  postMessage(data: any): void;
-  addEventListener(type: string, listener: (event: any) => void): void;
-  removeEventListener(type: string, listener: (event: any) => void): void;
-}
+// export interface IWebWorker {
+//   postMessage(data: any): void;
+//   addEventListener(type: string, listener: (event: any) => void): void;
+//   removeEventListener(type: string, listener: (event: any) => void): void;
+// }
