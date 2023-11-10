@@ -1,7 +1,6 @@
-import React from "react";
 import { DroppableProvided } from "react-beautiful-dnd";
-import { useStoreState } from "../state/typedHooks";
-import { IColumn, TaskStatus } from "../interfaces";
+
+import { IColumn } from "../interfaces";
 import Task from "./Task";
 
 interface TaskListProps {
@@ -13,7 +12,7 @@ export default function TaskList({ column, provided }: TaskListProps) {
   return (
     <div
       ref={provided?.innerRef}
-      // {...provided.droppableProps}
+      {...provided?.droppableProps}
       className='grid gap-2 my-2'
     >
       <>
