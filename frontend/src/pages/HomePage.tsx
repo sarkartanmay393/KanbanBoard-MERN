@@ -1,23 +1,43 @@
 import { useEffect } from "react";
-import Board from "../components/Board";
-import { TaskStatus } from "../interfaces";
-import { useStoreActions, useStoreState } from "../state/typedHooks";
 import { useNavigate } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
+
+import Board from "../components/Board";
+import { useStoreActions, useStoreState } from "../state/typedHooks";
+import { ITask, TaskStatus } from "../interfaces";
 
 // const worker = new Worker(new URL('../worker/WebWorker.ts', import.meta.url));
 
 export default function HomePage() {
   const { isLoading } = useStoreState((state) => state);
-  const { addOneTask, setTasks, setUser, setIsLoading } = useStoreActions((action) => action);
+  const { addTask, setTasks, setUser, setIsLoading, setGlobalaTaskStore } = useStoreActions((action) => action);
   const navigateTo = useNavigate();
 
-  const handleNewTask = () => {
-    addOneTask();
+  const handleNewTask = async () => {
+    let defaultTask = {
+      title: "",
+      description: "",
+      tags: [""],
+      status: TaskStatus.NotStarted,
+      projectId: "",
+      dueDate: "",
+    };
+
+    const resp = await fetch("/api/task/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(defaultTask),
+    });
+
+    const newTask: ITask = await resp.json();
+    addTask(newTask);
+    // setGlobalaTaskStore(null);
   }
 
   useEffect(() => {
-    const fetchStateData = async () => {
+    ((async () => {
       try {
         const resp = await fetch('/api/task/all', {
           method: 'GET', headers: {
@@ -30,18 +50,18 @@ export default function HomePage() {
         }
         setIsLoading(false);
         setTasks(tasks);
+        setGlobalaTaskStore(tasks);
       } catch (err) {
-        console.error(err);
+        console.log(err);
       }
-    }
-
-    fetchStateData();
+    })());
+    console.log(`fetched all tasks`)
   }, []);
 
   const handleLogout = () => {
     (async () => {
       try {
-        const resp = await fetch('/api/logout', { method: 'GET' });
+        await fetch('/api/logout', { method: 'GET' });
         navigateTo('/login', { replace: true });
       } catch (err) {
         console.error(err);

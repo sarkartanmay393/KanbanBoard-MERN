@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import { StoreProvider, createStore } from 'easy-peasy';
 import globalStore from './state/globalStore';
 import { IGlobalStore } from './interfaces';
+import { enableMapSet } from 'immer';
 
 
 const root = ReactDOM.createRoot(
@@ -35,6 +36,10 @@ const store = createStore<IGlobalStore>(globalStore);
 
 // });
 // // }, 2000);
+
+
+// Call enableMapSet() to enable the Map and Set plugins
+enableMapSet();
 
 root.render(
   // <React.StrictMode>

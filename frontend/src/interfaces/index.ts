@@ -33,6 +33,7 @@ export interface IColumn {
   _id: string;
   name: string;
   relatedStatus: TaskStatus;
+  tasks: Set<ITask>;
 }
 
 export interface IGlobalStore {
@@ -40,19 +41,20 @@ export interface IGlobalStore {
   isLoading: Boolean;
   error: string;
   user: IUser | null;
-  tasks: ITask[];
-  readonly columns: IPair<IColumn>;
+  globalTaskStore: Set<ITask>;
+  columns: IPair<IColumn>;
   readonly columnOrder: string[];
 
   // data fetching
+  setGlobalaTaskStore: Action<IGlobalStore, Set<ITask> | null>;
   setIsLoading: Action<IGlobalStore, boolean>;
   setError: Action<IGlobalStore, string>;
   setUser: Action<IGlobalStore, IUser | null>;
-  setTasks: Action<IGlobalStore, ITask[]>;
+  setTasks: Action<IGlobalStore, Set<ITask>>;
 
   // Task management
-  addOneTask: Action<IGlobalStore>;
-  removeOneTask: Action<IGlobalStore, string>;
+  addTask: Action<IGlobalStore, ITask>;
+  removeTask: Action<IGlobalStore, ITask>;
   updateTask: Action<IGlobalStore, ITask>;
 
   //  utils
