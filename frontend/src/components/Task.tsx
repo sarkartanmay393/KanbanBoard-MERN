@@ -22,9 +22,8 @@ export default function Task({ taskData, index }: TaskProps) {
   });
 
   const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': "*",
-    'Access-Control-Allow-Methods': "POST",
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
   };
 
   const handleChange = (e:

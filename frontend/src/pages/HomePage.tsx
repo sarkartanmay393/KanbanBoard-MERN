@@ -14,9 +14,8 @@ export default function HomePage() {
   const navigateTo = useNavigate();
 
   const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': "*",
-    'Access-Control-Allow-Methods': "POST",
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
   };
 
   const handleNewTask = async () => {
@@ -45,11 +44,7 @@ export default function HomePage() {
     ((async () => {
       try {
         const resp = await fetch('/api/task/all', {
-          method: 'GET', headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Access-Control-Allow-Methods': "GET",
-          }
+          method: 'GET', headers: headers,
         });
         const tasks = await resp.json();
         if (tasks === false && resp.status === 401) {
@@ -69,11 +64,7 @@ export default function HomePage() {
     (async () => {
       try {
         await fetch('/api/logout', {
-          method: 'GET', headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Access-Control-Allow-Methods': "GET",
-          },
+          method: 'GET', headers: headers,
         });
         navigateTo('/login', { replace: true });
       } catch (err) {

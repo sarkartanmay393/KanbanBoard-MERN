@@ -20,12 +20,12 @@ app.use(cors.default({ origin: "*" }));
 
 app.use(cookie());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "../public")));
+// app.use(express.static(path.join(__dirname, "../public")));
 
-// Get request for all url other than '/api'
-app.get(/^(?!\/api).+/, (_, res: ResType) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
+// // Get request for all url other than '/api'
+// app.get(/^(?!\/api).+/, (_, res: ResType) => {
+//   res.sendFile(path.join(__dirname, "../public/index.html"));
+// });
 
 // Authentication
 app.post("/api/signup", signUp);

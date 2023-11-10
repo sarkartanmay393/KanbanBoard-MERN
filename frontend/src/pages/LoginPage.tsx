@@ -11,10 +11,8 @@ export default function LoginPage() {
   const { setUser } = useStoreActions((action) => (action));
 
   const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': "*",
-    'Access-Control-Allow-Methods': "POST",
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
   };
 
   const handleSubmit = async () => {
@@ -47,7 +45,6 @@ export default function LoginPage() {
     }
     catch (error) {
       setError(`${error}`)
-      console.log(`Error appeared: ${error}`)
     };
 
   }
