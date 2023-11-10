@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.2.0",
   "private": true,
-  "proxy": "http://tsm-backend-production.up.railway.app",
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
     "@types/node": "^16.18.60",
