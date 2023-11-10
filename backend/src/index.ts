@@ -17,6 +17,7 @@ const PORT = 8080;
 const app = express();
 
 app.use(cors.default({ origin: "*" }));
+
 app.use(cookie());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
