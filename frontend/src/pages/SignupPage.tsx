@@ -10,6 +10,13 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = React.useState(false);
   const { setUser } = useStoreActions((action) => (action));
 
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': "*",
+    'Access-Control-Allow-Methods': "POST",
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  };
+
 
   const handleSubmit = async () => {
     setError("");
@@ -24,9 +31,7 @@ export default function SignupPage() {
     try {
       const resp = await fetch('/api/signup', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers,
         body: credentials,
       });
 

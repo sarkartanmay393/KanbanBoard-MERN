@@ -21,6 +21,12 @@ export default function Task({ taskData, index }: TaskProps) {
     projectId: taskData.projectId,
   });
 
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': "*",
+    'Access-Control-Allow-Methods': "POST",
+  };
+
   const handleChange = (e:
     ChangeEvent<HTMLTextAreaElement>
     | ChangeEvent<HTMLInputElement>
@@ -37,9 +43,7 @@ export default function Task({ taskData, index }: TaskProps) {
       try {
         const resp = await fetch("/api/task/update", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: headers,
           body: JSON.stringify(taskValue),
         });
         await resp.json();
@@ -55,9 +59,7 @@ export default function Task({ taskData, index }: TaskProps) {
   const handleDelete = async () => {
     const resp = await fetch("/api/task/delete", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: headers,
       body: JSON.stringify({ _id: taskData._id }),
     });
 

@@ -30,6 +30,7 @@ app.get(/^(?!\/api).+/, (_, res: ResType) => {
 // Authentication
 app.post("/api/signup", signUp);
 app.post("/api/login", logIn);
+
 app.use(verifyAuth);
 app.post("/api/update", update);
 app.get("/api/logout", logOut);

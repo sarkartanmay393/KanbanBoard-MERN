@@ -10,6 +10,13 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = React.useState(false);
   const { setUser } = useStoreActions((action) => (action));
 
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': "*",
+    'Access-Control-Allow-Methods': "POST",
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  };
+
   const handleSubmit = async () => {
     setError("");
     setIsLoading(true);
@@ -23,9 +30,7 @@ export default function LoginPage() {
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers,
         body: credentials,
       });
 
