@@ -7,4 +7,4 @@ cp -fr backend/* server-deploy
 cp -fr frontend/build/* server-deploy/public
 rm -fr frontend/build frontend/node_modules
 
-cd server-deploy && npm run setup
+cd server-deploy && npm install
