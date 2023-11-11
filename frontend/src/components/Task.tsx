@@ -1,8 +1,10 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { debounce } from 'lodash';
 
-import { useStoreActions, useStoreState } from "../state/typedHooks";
+import { useStoreActions } from "../state/typedHooks";
 import { ITask, TaskStatus } from "../interfaces";
 import { Draggable } from "react-beautiful-dnd";
+import { headers, updateTaskAPI } from "../worker/WebWorker";
 
 interface TaskProps {
   taskData: ITask;
@@ -10,8 +12,7 @@ interface TaskProps {
 }
 
 export default function Task({ taskData, index }: TaskProps) {
-  const { updateTask, removeTask, setGlobalaTaskStore } = useStoreActions((action) => action);
-  const { globalTaskStore } = useStoreState((state) => state);
+  const { updateTask, removeTask } = useStoreActions((action) => action);
   const [taskValue, setTaskValue] = useState<ITask>({
     _id: taskData._id,
     title: taskData.title,
@@ -21,11 +22,6 @@ export default function Task({ taskData, index }: TaskProps) {
     tags: taskData.tags,
     projectId: taskData.projectId,
   });
-
-  const headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  };
 
   const handleChange = async (e:
     ChangeEvent<HTMLTextAreaElement>
@@ -41,25 +37,15 @@ export default function Task({ taskData, index }: TaskProps) {
         "_id": prev._id,
       };
 
+      updateTaskAPI(latestTaskBody);
       updateTask(latestTaskBody);
       return latestTaskBody;
     });
-
-    const sync = async () => {
-      try {
-        const resp = await fetch("/api/task/update", {
-          method: "POST",
-          headers: headers,
-          body: JSON.stringify(taskValue),
-        });
-
-        await resp.json();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    sync();
   }
+
+  useEffect(() => {
+    return () => { }
+  }, []);
 
   if (!taskData) { return <></> }
 
@@ -100,7 +86,6 @@ export default function Task({ taskData, index }: TaskProps) {
   //     console.log('focus')
   //   }
   // }
-
 
   return (
     <Draggable draggableId={taskData._id} index={index}>
