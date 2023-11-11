@@ -1,19 +1,11 @@
-FROM node:20
+FROM node:latest
 
 WORKDIR /app
+COPY . .
 
-COPY ./backend ./backend
-COPY ./frontend ./frontend
+RUN bash prod.sh
 
-# Reset build files
-RUN rm -fr backend/public/*
+WORKDIR /app/server-deploy
 
-# Install dependencies and build the frontend
-RUN cd frontend && npm install && npm run build && cd ..
-RUN cp -fr frontend/build/* backend/public
-
-EXPOSE 8080
-
-WORKDIR /app/backend
-RUN npm i -g ts-node
-CMD ["npm", "run", "setup"]
+EXPOSE 80
+CMD ["npm", "start"]

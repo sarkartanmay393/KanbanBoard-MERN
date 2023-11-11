@@ -43,6 +43,7 @@ export interface IGlobalStore {
   user: IUser | null;
   globalTaskStore: Set<ITask>;
   columns: IPair<IColumn>;
+  tasks: IPair<ITask> | null;
   readonly columnOrder: string[];
 
   // data fetching

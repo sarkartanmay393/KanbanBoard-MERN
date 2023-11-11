@@ -11,7 +11,7 @@ import User from "./models/User";
 import connectDatabase from "./utils/connectDatabase";
 import { logIn, logOut, signUp, update } from "./handlers/auth";
 import verifyAuth from "./middlewares/verifyAuth";
-import { ResType } from "./types";
+import { ReqType, ResType } from "./types";
 
 const PORT = 8080;
 const app = express();
@@ -23,7 +23,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 
 // Get request for all url other than '/api'
-app.get(/^(?!\/api).+/, (_, res: ResType) => {
+app.get(/^(?!\/api).+/, (req: ReqType, res: ResType) => {
+  const { userid } = req.headers;
+  if (!userid) { 
+    res.redirect('login');
+  }
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 

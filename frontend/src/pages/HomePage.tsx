@@ -9,7 +9,7 @@ import { ITask, TaskStatus } from "../interfaces";
 // const worker = new Worker(new URL('../worker/WebWorker.ts', import.meta.url));
 
 export default function HomePage() {
-  const { isLoading } = useStoreState((state) => state);
+  const { isLoading, user } = useStoreState((state) => state);
   const { addTask, setTasks, setUser, setIsLoading, setGlobalaTaskStore } = useStoreActions((action) => action);
   const navigateTo = useNavigate();
 
@@ -33,14 +33,13 @@ export default function HomePage() {
       headers: headers,
       body: JSON.stringify(defaultTask),
     });
-
     const newTask: ITask = await resp.json();
+
     addTask(newTask);
     // setGlobalaTaskStore(null);
   }
 
   useEffect(() => {
-
     ((async () => {
       try {
         const resp = await fetch('/api/task/all', {
@@ -52,7 +51,7 @@ export default function HomePage() {
         }
         setIsLoading(false);
         setTasks(tasks);
-        setGlobalaTaskStore(tasks);
+        // setGlobalaTaskStore(tasks);
         console.log(`fetched all tasks`)
       } catch (err) {
         console.log(err);
@@ -73,7 +72,6 @@ export default function HomePage() {
     })();
     setUser(null)
   }
-
 
   interface LoadingSpinnerProps {
     loading: boolean,
@@ -103,5 +101,4 @@ export default function HomePage() {
 
 const DefaultBoardProps: Record<string, string> = {
   "width": '90%'
-
 };

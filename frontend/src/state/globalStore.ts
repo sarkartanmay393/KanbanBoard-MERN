@@ -12,7 +12,7 @@ const globalStore: IGlobalStore = {
   isLoading: true,
   error: "",
   user: null,
-  // tasks: new Set<ITask>(),
+  tasks: null,
   columns: {
     "column-1": {
       _id: "column-1",
@@ -50,47 +50,58 @@ const globalStore: IGlobalStore = {
   }),
 
   setTasks: action((state, payload: Set<ITask>) => {
+    let localTasksVar: IPair<ITask> = {};
+
     [...payload].forEach((task) => {
-      setTaskInColumn(state.columns, task);
+      const pair = {
+        [task._id]: task,
+      } as IPair<ITask>;
+      localTasksVar = {
+        ...localTasksVar,
+        ...pair,
+      };
     });
+
+    state.tasks = localTasksVar;
   }),
 
   addTask: action((state, payload: ITask) => {
-    state.columns["column-1"].tasks.add(payload);
+    state.tasks = {
+      payload,
+      ...state.tasks,
+    };
   }),
 
   removeTask: action((state, playload: ITask) => {
-    removeTaskInColumn(state.columns, playload);
+    if (state.tasks === null) {
+      return;
+    }
+
+    const filteredTasks = Object.values(state.tasks).filter(
+      (task) => task._id !== playload._id
+    );
+
+    let localTasksVar: IPair<ITask> = {};
+    filteredTasks.forEach((task) => {
+      const pair = {
+        [task._id]: task,
+      } as IPair<ITask>;
+      localTasksVar = {
+        ...localTasksVar,
+        ...pair,
+      };
+    });
+
+    state.tasks = localTasksVar;
   }),
 
   updateTask: action((state, payload: ITask) => {
-    // const prevTaskBody = [...state.globalTaskStore].find(
-    //   (task) => task._id === payload.task._id
-    // );
-
-    console.log(payload);
-
-    // switch (prevTaskBody?.status) {
-    //   case TaskStatus.NotStarted: {
-    //     state.columns["column-1"].tasks.delete(prevTaskBody);
-    //     break;
-    //   }
-    //   case TaskStatus.InProgress: {
-    //     break;
-    //   }
-    //   case TaskStatus.Review: {
-    //     break;
-    //   }
-    //   case TaskStatus.Complete: {
-    //     break;
-    //   }
-    // }
+    if (state.tasks) state.tasks[payload._id] = payload;
   }),
-  setError: {
-    type: "action",
-    payload: "",
-    result: undefined,
-  },
+
+  setError: action((state, payload) => {
+    state.error = payload;
+  }),
 
   globalTaskStore: new Set(),
   setGlobalaTaskStore: action((state, payload) => {
@@ -103,12 +114,56 @@ const globalStore: IGlobalStore = {
     } else {
       state.globalTaskStore = payload;
     }
-
-    // console.log(state.globalTaskStore);
   }),
 };
 
 export default globalStore;
+
+const updateTaskInColumn = (columns: IPair<IColumn>, task: ITask) => {
+  switch (task.status) {
+    case TaskStatus.NotStarted: {
+      // columns["column-1"].tasks.forEach((ts, ts2, set) => {
+      console.log(task);
+      //   console.log(ts2._id);
+      // });
+      // columns["column-1"].tasks.break;
+      break;
+    }
+    case TaskStatus.InProgress: {
+      const column = columns["column-2"];
+      const prevTask = [...column.tasks].find(
+        (prevTask) => prevTask._id === task._id
+      );
+      if (prevTask) {
+        column.tasks.delete(prevTask);
+      }
+      column.tasks.add(task);
+      break;
+    }
+    case TaskStatus.Review: {
+      const column = columns["column-3"];
+      const prevTask = [...column.tasks].find(
+        (prevTask) => prevTask._id === task._id
+      );
+      if (prevTask) {
+        column.tasks.delete(prevTask);
+      }
+      column.tasks.add(task);
+      break;
+    }
+    case TaskStatus.Complete: {
+      const column = columns["column-4"];
+      const prevTask = [...column.tasks].find(
+        (prevTask) => prevTask._id === task._id
+      );
+      if (prevTask) {
+        column.tasks.delete(prevTask);
+      }
+      column.tasks.add(task);
+      break;
+    }
+  }
+};
 
 const removeTaskInColumn = (columns: IPair<IColumn>, task: ITask) => {
   switch (task.status) {
@@ -130,6 +185,7 @@ const removeTaskInColumn = (columns: IPair<IColumn>, task: ITask) => {
     }
   }
 };
+
 const setTaskInColumn = (columns: IPair<IColumn>, task: ITask) => {
   switch (task.status) {
     case TaskStatus.NotStarted: {

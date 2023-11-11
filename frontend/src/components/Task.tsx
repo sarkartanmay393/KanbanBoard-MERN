@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 
-import { useStoreActions } from "../state/typedHooks";
+import { useStoreActions, useStoreState } from "../state/typedHooks";
 import { ITask, TaskStatus } from "../interfaces";
 import { Draggable } from "react-beautiful-dnd";
 
@@ -10,7 +10,8 @@ interface TaskProps {
 }
 
 export default function Task({ taskData, index }: TaskProps) {
-  const { updateTask, removeTask, setGlobalaTaskStore } = useStoreActions((action) => action)
+  const { updateTask, removeTask, setGlobalaTaskStore } = useStoreActions((action) => action);
+  const { globalTaskStore } = useStoreState((state) => state);
   const [taskValue, setTaskValue] = useState<ITask>({
     _id: taskData._id,
     title: taskData.title,
@@ -26,17 +27,23 @@ export default function Task({ taskData, index }: TaskProps) {
     'Content-Type': 'application/json'
   };
 
-  const handleChange = (e:
+  const handleChange = async (e:
     ChangeEvent<HTMLTextAreaElement>
     | ChangeEvent<HTMLInputElement>
     | ChangeEvent<HTMLSelectElement>
   ) => {
-    // e.preventDefault();
-    setTaskValue(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-    updateTask(taskValue);
+    e.preventDefault();
+
+    setTaskValue((prev) => {
+      const latestTaskBody = {
+        ...prev,
+        [e.target.name]: e.target.value,
+        "_id": prev._id,
+      };
+
+      updateTask(latestTaskBody);
+      return latestTaskBody;
+    });
 
     const sync = async () => {
       try {
@@ -45,6 +52,7 @@ export default function Task({ taskData, index }: TaskProps) {
           headers: headers,
           body: JSON.stringify(taskValue),
         });
+
         await resp.json();
       } catch (err) {
         console.log(err);
@@ -64,7 +72,6 @@ export default function Task({ taskData, index }: TaskProps) {
 
     await resp.json();
     removeTask(taskData);
-    // setGlobalaTaskStore(null);
   }
 
   const getTaskStatusPrettified = (ts: string, getEnum: boolean): TaskStatus | string => {
@@ -96,7 +103,7 @@ export default function Task({ taskData, index }: TaskProps) {
 
 
   return (
-    <Draggable key={taskData._id} draggableId={taskData._id} index={index}>
+    <Draggable draggableId={taskData._id} index={index}>
       {provided =>
         <div
           id={`${taskData._id}`}
@@ -105,11 +112,14 @@ export default function Task({ taskData, index }: TaskProps) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
+
           <img
             onClick={handleDelete}
             className="relative md:self-end border-[2px] border-solid border-solid rounded-[6px] mt-2 cursor-pointer "
             width={20} src="https://www.svgrepo.com/show/21045/delete-button.svg"
-            alt="" />
+            alt=""
+          />
+
           <div className="grid mt-[-10%]">
 
             <input name="title" placeholder="Implement User Auth"
@@ -118,7 +128,7 @@ export default function Task({ taskData, index }: TaskProps) {
 
             <textarea name="description" placeholder="Use next-auth or passport.js and go through docs"
               className="focus:outline-0 focus:bg-pink-100 text-[0.8rem] lg:text-[0.9rem] bg-transparent rounded-[6px] p-2 "
-              style={{}} value={taskValue.description} onChange={handleChange} />
+              value={taskValue.description} onChange={handleChange} />
 
           </div>
           <div className="flex gap-2 justify-start items-center ">

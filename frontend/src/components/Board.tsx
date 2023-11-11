@@ -1,16 +1,45 @@
 import { DragDropContext, DropResult, ResponderProvided } from "react-beautiful-dnd";
 
 import Column from "./Column";
-import { useStoreState } from "../state/typedHooks";
+import { useStoreActions, useStoreState } from "../state/typedHooks";
 
 interface BoardProps {
   styleProps: Record<string, string>;
 }
 
 export default function Board({ styleProps }: BoardProps) {
-  const columns = useStoreState((state) => state.columns);
-  const columnOrder = useStoreState((state) => state.columnOrder);
-  const handleDragEnd = (result: DropResult, provided: ResponderProvided) => { }
+  const { columns, columnOrder, tasks } = useStoreState((state) => state);
+  const { updateTask } = useStoreActions((action) => action);
+
+  const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  };
+
+  const handleDragEnd = (result: DropResult, provided: ResponderProvided) => {
+    if (tasks && result.destination?.droppableId) {
+      const latestTaskBody = {
+        ...tasks[result.draggableId],
+        'status': columns[result.destination?.droppableId!].relatedStatus,
+      };
+      updateTask(latestTaskBody);
+
+      const sync = async () => {
+        try {
+          const resp = await fetch("/api/task/update", {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(latestTaskBody),
+          });
+
+          await resp.json();
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      sync();
+    }
+  }
 
   return (
     <div id="board" className='h-[100%] grid grid-cols-4 gap-2 m-4 px-4' style={styleProps}>
