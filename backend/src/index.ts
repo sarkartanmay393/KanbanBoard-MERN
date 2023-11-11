@@ -23,13 +23,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 
 // Get request for all url other than '/api'
-app.get(/^(?!\/api).+/, (req: ReqType, res: ResType) => {
-  const { userid } = req.headers;
-  if (!userid) { 
-    res.redirect('login');
-  }
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
+// app.get(/^(?!\/api).+/, (req: ReqType, res: ResType) => {
+//   const { userid } = req.headers;
+//   if (!userid) { 
+//     res.redirect('login');
+//   }
+//   res.sendFile(path.join(__dirname, "../public/index.html"));
+// });
 
 // Authentication
 app.post("/api/signup", signUp);
