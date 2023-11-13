@@ -14,30 +14,6 @@ const root = ReactDOM.createRoot(
 
 const store = createStore<IGlobalStore>(globalStore);
 
-// TODO: implement real time sync with no high pressure
-// // setTimeout(() => {
-// const unsubscriber = store.subscribe(() => {
-//   const updatedState = store.getState().user;
-//   const syncDatabaseWithReduc = async (updatedState: ITask[]) => {
-//     const resp = await fetch('/api/task/update', {
-//       method: 'POST', headers: {
-//         'Content-Type': 'application/json',
-//       }, body: JSON.stringify(updatedState),
-//     });
-//     const res = await resp.json();
-//     console.log(res)
-//   }
-
-//   function compareArrays(array1: any[], array2: any[]): any[] {
-//     const uniqueElements = array1.filter(element => !array2.includes(element));
-//     return uniqueElements;
-//   }
-//   // syncDatabaseWithReduc(updatedState);
-
-// });
-// // }, 2000);
-
-
 // Call enableMapSet() to enable the Map and Set plugins
 enableMapSet();
 

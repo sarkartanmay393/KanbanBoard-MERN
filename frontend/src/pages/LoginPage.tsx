@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useStoreActions } from "../state/typedHooks";
+import { headers } from "../worker/WebWorker";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -9,11 +10,6 @@ export default function LoginPage() {
   const [error, setError] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const { setUser } = useStoreActions((action) => (action));
-
-  const headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  };
 
   const handleSubmit = async () => {
     setError("");

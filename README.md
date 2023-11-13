@@ -5,10 +5,10 @@
 <div align="center">
 
   <a href="https://github.com/sarkartanmay393/KanbanBoard-MERN">
-    <img src="icon.png" alt="Logo" width="125" height="125">
+    <img src="./frontend/public/logo.png" alt="Logo" width="125" height="125">
   </a>
 
-<h3 align="center">Kardan Board: Task Manager</h3>
+<h3 align="center">Kanban Board: Task Manager</h3>
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -197,10 +197,8 @@ Project Link: [https://github.com/sarkartanmay393/KanbanBoard-MERN](https://gith
 [issues-url]: https://github.com/sarkartanmay393/KanbanBoard-MERN/issues
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/tanmaysrkr
-
 [Docker.com]: https://img.shields.io/badge/Docker-2496ed?style=for-the-badge&logo=docker&logoColor=white
 [Docker-url]: https://www.docker.com/
-
 [PostgreSQL.com]: https://img.shields.io/badge/PostgreSQL-4169e1?style=for-the-badge&logo=postgresql&logoColor=white
 [PostgreSQL-url]: https://www.postgresql.org/
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white

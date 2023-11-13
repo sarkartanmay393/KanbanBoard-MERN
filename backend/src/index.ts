@@ -14,7 +14,7 @@ const PORT = 8080;
 const app = express();
 
 // Middlewares
-app.use(cors.default({ origin: "http://localhost:3000" }));
+app.use(cors.default({ origin: "*" }));
 app.use(cookie());
 app.use(express.json());
 

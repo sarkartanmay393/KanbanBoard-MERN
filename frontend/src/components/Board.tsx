@@ -2,6 +2,7 @@ import { DragDropContext, DropResult, ResponderProvided } from "react-beautiful-
 
 import Column from "./Column";
 import { useStoreActions, useStoreState } from "../state/typedHooks";
+import { headers } from "../worker/WebWorker";
 
 interface BoardProps {
   styleProps: Record<string, string>;
@@ -10,11 +11,6 @@ interface BoardProps {
 export default function Board({ styleProps }: BoardProps) {
   const { columns, columnOrder, tasks } = useStoreState((state) => state);
   const { updateTask } = useStoreActions((action) => action);
-
-  const headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  };
 
   const handleDragEnd = (result: DropResult, provided: ResponderProvided) => {
     if (tasks && result.destination?.droppableId) {
