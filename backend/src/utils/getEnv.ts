@@ -1,4 +1,3 @@
-
 const getEnvValue = (key: string) => {
   const value = process.env[key];
   if (typeof value === "undefined") {
@@ -9,3 +8,4 @@ const getEnvValue = (key: string) => {
 
 export const JWT_SECRET = getEnvValue("JWT");
 export const PASS = getEnvValue("PASS");
+export const PORT = getEnvValue("PORT");

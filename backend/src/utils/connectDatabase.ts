@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 
-const uri =
-  `mongodb+srv://tanmaysrkr:e9HXXHeZzN5c95EE@cluster0.eucuekw.mongodb.net/?retryWrites=true&w=majority`;
-
 const connectDatabase = async (callbackfn: Function) => {
+  const uri = `mongodb+srv://tanmaysrkr:e9HXXHeZzN5c95EE@cluster0.eucuekw.mongodb.net/?retryWrites=true&w=majority`;
   try {
     await mongoose.connect(uri, {
       dbName: "KanbanBoard",

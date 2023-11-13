@@ -1,35 +1,22 @@
 import * as dotenv from "dotenv";
-import express from "express";
-import cookie from "cookie-parser";
 dotenv.config();
 
-import path from "path";
 import * as cors from "cors";
+import express from "express";
+import cookie from "cookie-parser";
 
 import { createTask, deleteTask, allTask, updateTask } from "./handlers/task";
-import User from "./models/User";
 import connectDatabase from "./utils/connectDatabase";
 import { logIn, logOut, signUp, update } from "./handlers/auth";
 import verifyAuth from "./middlewares/verifyAuth";
-import { ReqType, ResType } from "./types";
 
 const PORT = 8080;
 const app = express();
 
-app.use(cors.default({ origin: "*" }));
-
+// Middlewares
+app.use(cors.default({ origin: "http://localhost:3000" }));
 app.use(cookie());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "../public")));
-
-// Get request for all url other than '/api'
-// app.get(/^(?!\/api).+/, (req: ReqType, res: ResType) => {
-//   const { userid } = req.headers;
-//   if (!userid) { 
-//     res.redirect('login');
-//   }
-//   res.sendFile(path.join(__dirname, "../public/index.html"));
-// });
 
 // Authentication
 app.post("/api/signup", signUp);
@@ -44,11 +31,6 @@ app.get("/api/task/all", allTask);
 app.post("/api/task/create", createTask);
 app.post("/api/task/update/", updateTask);
 app.post("/api/task/delete", deleteTask);
-
-app.get("/api/users", async (_: any, res: ResType) => {
-  const users = await User.find({});
-  return res.json(users);
-});
 
 connectDatabase(() => {
   app.listen(PORT, () => {
