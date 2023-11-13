@@ -5,6 +5,7 @@ import { MoonLoader } from "react-spinners";
 import Board from "../components/Board";
 import { useStoreActions, useStoreState } from "../state/typedHooks";
 import { ITask, TaskStatus } from "../interfaces";
+import { headers } from "../worker/WebWorker";
 
 // const worker = new Worker(new URL('../worker/WebWorker.ts', import.meta.url));
 
@@ -12,11 +13,6 @@ export default function HomePage() {
   const { isLoading, user } = useStoreState((state) => state);
   const { addTask, setTasks, setUser, setIsLoading, setGlobalaTaskStore } = useStoreActions((action) => action);
   const navigateTo = useNavigate();
-
-  const headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  };
 
   const handleNewTask = async () => {
     let defaultTask = {
