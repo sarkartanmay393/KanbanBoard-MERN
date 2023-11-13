@@ -4,7 +4,9 @@
   "description": "Contains a task management dashboard with useful features including drag-and-drop.",
   "scripts": {
     "install-backend": "cd backend && npm install",
+    "build-backend": "cd backend && npm run build",
     "start-backend": "cd backend && npm start",
+    "start-backend-build": "cd backend && node ./dist/index.js",
     "install-frontend": "cd frontend && npm install",
     "build-frontend": "cd frontend && npm run build",
     "start-frontend": "cd frontend && npm start"
