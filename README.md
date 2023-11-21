@@ -32,6 +32,12 @@ issues">Report Bug</a>
 issues">Request Feature</a>
  </p>
 
+ <div>
+   <p>Dummy Account</p>
+   <p>Email: tanmay1@test.com</p>
+   <p>Pass: Tanmay123</p>
+ </div>
+
 </div>
 
 <!-- TABLE OF CONTENTS -->
