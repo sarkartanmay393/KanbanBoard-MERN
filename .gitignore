@@ -24,6 +24,5 @@ yarn-error.log*
 
 backend/.env
 
-backend/dist/
 
 
