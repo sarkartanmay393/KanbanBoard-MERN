@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useStoreActions } from "../state/typedHooks";
 import { headers } from "../worker/WebWorker";
+import { baseUrl } from "../lib/network";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function SignupPage() {
     });
 
     try {
-      const resp = await fetch('/api/signup', {
+      const resp = await fetch(baseUrl + '/api/signup', {
         method: 'POST',
         headers: headers,
         body: credentials,

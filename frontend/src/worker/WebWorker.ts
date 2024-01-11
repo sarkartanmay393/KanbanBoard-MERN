@@ -1,4 +1,5 @@
 import { ITask } from "../interfaces";
+import { baseUrl } from "../lib/network";
 
 export const onmessage = (event: MessageEvent<string>) => {
   // Perform some calculations or tasks
@@ -9,7 +10,7 @@ export const onmessage = (event: MessageEvent<string>) => {
 
 export const updateTaskAPI = async (taskValue: ITask) => {
   try {
-    const resp = await fetch("/api/task/update", {
+    const resp = await fetch(baseUrl + "/api/task/update", {
       method: "POST",
       headers: headers,
       body: JSON.stringify(taskValue),

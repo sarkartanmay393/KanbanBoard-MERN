@@ -1,10 +1,11 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 
 import { useStoreActions } from "../state/typedHooks";
 import { ITask, TaskStatus } from "../interfaces";
 import { Draggable } from "react-beautiful-dnd";
 import { headers, updateTaskAPI } from "../worker/WebWorker";
+import { baseUrl } from "../lib/network";
 
 interface TaskProps {
   taskData: ITask;
@@ -23,10 +24,11 @@ export default function Task({ taskData, index }: TaskProps) {
     projectId: taskData.projectId,
   });
 
-  const handleChange = async (e:
-    ChangeEvent<HTMLTextAreaElement>
-    | ChangeEvent<HTMLInputElement>
-    | ChangeEvent<HTMLSelectElement>
+  const handleChange = async (
+    e:
+      | ChangeEvent<HTMLTextAreaElement>
+      | ChangeEvent<HTMLInputElement>
+      | ChangeEvent<HTMLSelectElement>
   ) => {
     e.preventDefault();
 
@@ -34,23 +36,25 @@ export default function Task({ taskData, index }: TaskProps) {
       const latestTaskBody = {
         ...prev,
         [e.target.name]: e.target.value,
-        "_id": prev._id,
+        _id: prev._id,
       };
 
       updateTaskAPI(latestTaskBody);
       updateTask(latestTaskBody);
       return latestTaskBody;
     });
-  }
+  };
 
   useEffect(() => {
-    return () => { }
+    return () => {};
   }, []);
 
-  if (!taskData) { return <></> }
+  if (!taskData) {
+    return <></>;
+  }
 
   const handleDelete = async () => {
-    const resp = await fetch("/api/task/delete", {
+    const resp = await fetch(baseUrl + "/api/task/delete", {
       method: "POST",
       headers: headers,
       body: JSON.stringify({ _id: taskData._id }),
@@ -58,28 +62,31 @@ export default function Task({ taskData, index }: TaskProps) {
 
     await resp.json();
     removeTask(taskData);
-  }
+  };
 
-  const getTaskStatusPrettified = (ts: string, getEnum: boolean): TaskStatus | string => {
+  const getTaskStatusPrettified = (
+    ts: string,
+    getEnum: boolean
+  ): TaskStatus | string => {
     switch (ts) {
-      case 'notstarted': {
+      case "notstarted": {
         return getEnum ? TaskStatus.NotStarted : "Not Started";
       }
-      case 'inprogress': {
+      case "inprogress": {
         return getEnum ? TaskStatus.InProgress : "In Progress";
       }
-      case 'review': {
+      case "review": {
         return getEnum ? TaskStatus.Review : "Review";
       }
-      case 'complete': {
+      case "complete": {
         return getEnum ? TaskStatus.Complete : "Complete";
       }
       default:
-        return getEnum ? TaskStatus.NotStarted : 'No Started';
+        return getEnum ? TaskStatus.NotStarted : "No Started";
     }
-  }
+  };
 
-  // TODO: send update req after focus leave from task component 
+  // TODO: send update req after focus leave from task component
   // const thisEl = document.getElementById(taskData._id);
   // if (thisEl) {
   //   thisEl.onfocus = (event) => {
@@ -89,7 +96,7 @@ export default function Task({ taskData, index }: TaskProps) {
 
   return (
     <Draggable draggableId={taskData._id} index={index}>
-      {provided =>
+      {(provided) => (
         <div
           id={`${taskData._id}`}
           ref={provided.innerRef}
@@ -97,51 +104,64 @@ export default function Task({ taskData, index }: TaskProps) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-
           <img
             onClick={handleDelete}
             className="relative md:self-end border-[2px] border-solid border-solid rounded-[6px] mt-2 cursor-pointer "
-            width={20} src="https://www.svgrepo.com/show/21045/delete-button.svg"
+            width={20}
+            src="https://www.svgrepo.com/show/21045/delete-button.svg"
             alt=""
           />
 
           <div className="grid mt-[-10%]">
-
-            <input name="title" placeholder="Implement User Auth"
+            <input
+              name="title"
+              placeholder="Implement User Auth"
               className="focus:outline-0 focus:bg-pink-100 text-[1rem] lg:text-[1.1rem] font-[600] bg-transparent rounded-[6px] p-2 "
-              value={taskValue.title} onChange={handleChange} />
+              value={taskValue.title}
+              onChange={handleChange}
+            />
 
-            <textarea name="description" placeholder="Use next-auth or passport.js and go through docs"
+            <textarea
+              name="description"
+              placeholder="Use next-auth or passport.js and go through docs"
               className="focus:outline-0 focus:bg-pink-100 text-[0.8rem] lg:text-[0.9rem] bg-transparent rounded-[6px] p-2 "
-              value={taskValue.description} onChange={handleChange} />
-
+              value={taskValue.description}
+              onChange={handleChange}
+            />
           </div>
           <div className="flex gap-2 justify-start items-center ">
-
             <div className="border border-black p-1 gap-1 flex items-center justify-center self-start rounded-[6px] min-w-[72px] h-[28px] bg-white text-[0.8rem]">
               <p className="flex justify-center items-center gap-1 font-[500]">
-                <span className="text-[0.4rem]">🔴</span> Due </p>
+                <span className="text-[0.4rem]">🔴</span> Due{" "}
+              </p>
 
-              <input id={`datepicker-${taskData._id}`}
+              <input
+                id={`datepicker-${taskData._id}`}
                 className="border rounded bg-transparent focus:outline-none border-transparent focus:border-blue-500 "
-                name="dueDate" type="date" value={taskValue.dueDate} onChange={handleChange} />
-
+                name="dueDate"
+                type="date"
+                value={taskValue.dueDate}
+                onChange={handleChange}
+              />
             </div>
 
             <div className="border border-black p-1 gap-1 flex items-center justify-center self-start rounded-[6px] min-w-[72px] h-[28px] bg-white text-[0.8rem]">
-
-              <select name="status" className="w-[100%] h-[100%] bg-transparent text-[0.8rem] font-[500] rounded-[6px]"
-                value={taskValue.status} onChange={handleChange}>
+              <select
+                name="status"
+                className="w-[100%] h-[100%] bg-transparent text-[0.8rem] font-[500] rounded-[6px]"
+                value={taskValue.status}
+                onChange={handleChange}
+              >
                 {Object.values(TaskStatus).map((status: string) => (
-                  <option key={status} value={status} >{getTaskStatusPrettified(status, false)}</option>
+                  <option key={status} value={status}>
+                    {getTaskStatusPrettified(status, false)}
+                  </option>
                 ))}
               </select>
-
             </div>
-
           </div>
         </div>
-      }
+      )}
     </Draggable>
   );
 }

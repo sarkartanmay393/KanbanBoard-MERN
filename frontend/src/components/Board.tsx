@@ -3,6 +3,7 @@ import { DragDropContext, DropResult, ResponderProvided } from "react-beautiful-
 import Column from "./Column";
 import { useStoreActions, useStoreState } from "../state/typedHooks";
 import { headers } from "../worker/WebWorker";
+import { baseUrl } from "../lib/network";
 
 interface BoardProps {
   styleProps: Record<string, string>;
@@ -22,7 +23,7 @@ export default function Board({ styleProps }: BoardProps) {
 
       const sync = async () => {
         try {
-          const resp = await fetch("/api/task/update", {
+          const resp = await fetch(baseUrl + "/api/task/update", {
             method: "POST",
             headers: headers,
             body: JSON.stringify(latestTaskBody),
