@@ -9,21 +9,14 @@ import { createTask, deleteTask, allTask, updateTask } from "./handlers/task";
 import connectDatabase from "./utils/connectDatabase";
 import { logIn, logOut, signUp, update } from "./handlers/auth";
 import verifyAuth from "./middlewares/verifyAuth";
-import path from "path";
-import { ReqType, ResType } from "./types";
 
 const PORT = 8080;
 const app = express();
 
 // Middlewares
-app.use(cors.default({ origin: "*" }));
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(cors.default({ origin: "http://localhost:3000", credentials: true }));
 app.use(cookie());
 app.use(express.json());
-
-app.get("^(?!/api/).*", (req: ReqType, res: ResType) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
 
 // Authentication
 app.post("/api/signup", signUp);

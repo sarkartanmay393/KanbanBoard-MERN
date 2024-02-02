@@ -26,6 +26,7 @@ export default function Board({ styleProps }: BoardProps) {
           const resp = await fetch(baseUrl + "/api/task/update", {
             method: "POST",
             headers: headers,
+            credentials: 'include',
             body: JSON.stringify(latestTaskBody),
           });
 

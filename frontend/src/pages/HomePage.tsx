@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
 
@@ -7,6 +7,7 @@ import { useStoreActions, useStoreState } from "../state/typedHooks";
 import { ITask, TaskStatus } from "../interfaces";
 import { headers } from "../worker/WebWorker";
 import { baseUrl } from "../lib/network";
+import { ToastContext } from "../provider/ToastProvider";
 
 // const worker = new Worker(new URL('../worker/WebWorker.ts', import.meta.url));
 
@@ -15,6 +16,7 @@ export default function HomePage() {
   const { addTask, setTasks, setUser, setIsLoading, setGlobalaTaskStore } =
     useStoreActions((action) => action);
   const navigateTo = useNavigate();
+  const { setToast } = useContext(ToastContext);
 
   const handleNewTask = async () => {
     let defaultTask = {
@@ -29,10 +31,15 @@ export default function HomePage() {
     const resp = await fetch(baseUrl + "/api/task/create", {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(defaultTask),
     });
     const newTask: ITask = await resp.json();
 
+    setToast({
+      text: "New task added!",
+      color: "green-200",
+    });
     addTask(newTask);
     // setGlobalaTaskStore(null);
   };
@@ -43,6 +50,7 @@ export default function HomePage() {
         const resp = await fetch(baseUrl + "/api/task/all", {
           method: "GET",
           headers: headers,
+          credentials: "include",
         });
         const tasks = await resp.json();
         if (tasks === false && resp.status === 401) {
@@ -64,6 +72,7 @@ export default function HomePage() {
         await fetch(baseUrl + "/api/logout", {
           method: "GET",
           headers: headers,
+          credentials: "include",
         });
         navigateTo("/login", { replace: true });
       } catch (err) {

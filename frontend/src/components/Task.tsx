@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { debounce } from "lodash";
 
 import { useStoreActions } from "../state/typedHooks";
@@ -6,6 +6,7 @@ import { ITask, TaskStatus } from "../interfaces";
 import { Draggable } from "react-beautiful-dnd";
 import { headers, updateTaskAPI } from "../worker/WebWorker";
 import { baseUrl } from "../lib/network";
+import { ToastContext } from "../provider/ToastProvider";
 
 interface TaskProps {
   taskData: ITask;
@@ -23,6 +24,7 @@ export default function Task({ taskData, index }: TaskProps) {
     tags: taskData.tags,
     projectId: taskData.projectId,
   });
+  const { setToast } = useContext(ToastContext);
 
   const handleChange = async (
     e:
@@ -57,10 +59,22 @@ export default function Task({ taskData, index }: TaskProps) {
     const resp = await fetch(baseUrl + "/api/task/delete", {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify({ _id: taskData._id }),
     });
 
-    await resp.json();
+    if (!resp.ok) {
+      setToast({
+        text: "failed deleting the task",
+        color: "red-200",
+      });
+      return;
+    }
+
+    setToast({
+      text: "Task is deleted now!",
+      color: "",
+    });
     removeTask(taskData);
   };
 

@@ -69,7 +69,9 @@ const logIn = async (req: ReqType, res: ResType) => {
 
     //Send the jwt token on successful login
     const token = createSecretToken(user.id);
-    res.cookie("token", token, { signed: undefined });
+    res.cookie("token", token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
 
     console.log(`Login successful! (${user.username})`);
     return res.json(user);

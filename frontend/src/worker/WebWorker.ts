@@ -13,6 +13,7 @@ export const updateTaskAPI = async (taskValue: ITask) => {
     const resp = await fetch(baseUrl + "/api/task/update", {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(taskValue),
     });
 
