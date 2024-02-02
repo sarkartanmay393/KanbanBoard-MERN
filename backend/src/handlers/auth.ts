@@ -71,6 +71,8 @@ const logIn = async (req: ReqType, res: ResType) => {
     const token = createSecretToken(user.id);
     res.cookie("token", token, {
       maxAge: 1000 * 60 * 60 * 24 * 7,
+      secure: true,
+      sameSite: "none",
     });
 
     console.log(`Login successful! (${user.username})`);
