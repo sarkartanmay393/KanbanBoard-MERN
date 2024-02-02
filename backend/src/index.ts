@@ -14,7 +14,12 @@ const PORT = 8080;
 const app = express();
 
 // Middlewares
-app.use(cors.default({ origin: "http://localhost:3000", credentials: true }));
+app.use(
+  cors.default({
+    origin: ["http://localhost:3000", "https://kanbanboard-ui.vercel.app"],
+    credentials: true,
+  })
+);
 app.use(cookie());
 app.use(express.json());
 
