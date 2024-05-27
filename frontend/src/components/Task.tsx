@@ -3,9 +3,9 @@ import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { useStoreActions } from "../state/typedHooks";
 import { ITask, TaskStatus } from "../interfaces";
 import { Draggable } from "react-beautiful-dnd";
-import { headers, updateTaskAPI } from "../worker/WebWorker";
-import { baseUrl } from "../lib/network";
 import { ToastContext } from "../provider/ToastProvider";
+import updateTask from "../api/updateTask";
+import deleteTask from "../api/deleteTask";
 
 interface TaskProps {
   taskData: ITask;
@@ -13,7 +13,9 @@ interface TaskProps {
 }
 
 export default function Task({ taskData, index }: TaskProps) {
-  const { updateTask, removeTask } = useStoreActions((action) => action);
+  const { updateTask: updateTaskState, removeTask } = useStoreActions(
+    (action) => action
+  );
   const [taskValue, setTaskValue] = useState<ITask>({
     _id: taskData._id,
     title: taskData.title,
@@ -40,8 +42,8 @@ export default function Task({ taskData, index }: TaskProps) {
         _id: prev._id,
       };
 
-      updateTaskAPI(latestTaskBody);
       updateTask(latestTaskBody);
+      updateTaskState(latestTaskBody);
       return latestTaskBody;
     });
   };
@@ -55,25 +57,7 @@ export default function Task({ taskData, index }: TaskProps) {
   }
 
   const handleDelete = async () => {
-    const resp = await fetch(baseUrl + "/api/task/delete", {
-      method: "POST",
-      headers: headers,
-      credentials: "include",
-      body: JSON.stringify({ _id: taskData._id }),
-    });
-
-    if (!resp.ok) {
-      setToast({
-        text: "failed deleting the task",
-        color: "red-200",
-      });
-      return;
-    }
-
-    setToast({
-      text: "Task is deleted now!",
-      color: "",
-    });
+    await deleteTask(taskData._id);
     removeTask(taskData);
   };
 

@@ -1,8 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useStoreActions } from "../state/typedHooks";
-import { headers } from "../worker/WebWorker";
-import { baseUrl } from "../lib/network";
+import { baseUrl, headers } from "../lib/network";
 
 export default function LoginPage() {
   const navigate = useNavigate();

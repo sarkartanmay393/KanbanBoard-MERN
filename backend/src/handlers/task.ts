@@ -84,11 +84,9 @@ const allTask = async (req: ReqType, res: ResType) => {
   const { userid } = req.headers;
   try {
     const user = await User.findById({ _id: userid });
-    const taskIds = user?.taskIds as string[];
-    const tasksDBdata = await Task.find({ _id: { $in: taskIds } });
-    if (tasksDBdata) {
-      return res.json(tasksDBdata);
-    }
+    const taskIds: string[] = user?.taskIds ?? [];
+    const tasks = await Task.find({ _id: { $in: taskIds } });
+    return res.json(tasks);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

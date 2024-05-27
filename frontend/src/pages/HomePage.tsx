@@ -1,100 +1,55 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MoonLoader } from "react-spinners";
 
 import Board from "../components/Board";
 import { useStoreActions, useStoreState } from "../state/typedHooks";
 import { ITask, TaskStatus } from "../interfaces";
-import { headers } from "../worker/WebWorker";
 import { baseUrl } from "../lib/network";
 import { ToastContext } from "../provider/ToastProvider";
+import LoadingSpinner from "../components/LoadingSpinner";
+import fetchTasks from "../api/fetchTasks";
+import createTask from "../api/createTask";
+import logout from "../api/logout";
 
 // const worker = new Worker(new URL('../worker/WebWorker.ts', import.meta.url));
 
 export default function HomePage() {
-  const { isLoading, user } = useStoreState((state) => state);
-  const { addTask, setTasks, setUser, setIsLoading, setGlobalaTaskStore } =
-    useStoreActions((action) => action);
+  const { user } = useStoreState((state) => state);
+  const { setUser } = useStoreActions((action) => action);
   const navigateTo = useNavigate();
   const { setToast } = useContext(ToastContext);
 
+  const [loading, setLoading] = useState(false);
+  const [tasks, setTasks] = useState<ITask[]>([]);
+
   const handleNewTask = async () => {
-    let defaultTask = {
-      title: "",
-      description: "",
-      tags: [""],
-      status: TaskStatus.NotStarted,
-      projectId: "",
-      dueDate: "",
-    };
-
-    const resp = await fetch(baseUrl + "/api/task/create", {
-      method: "POST",
-      headers: headers,
-      credentials: "include",
-      body: JSON.stringify(defaultTask),
-    });
-    const newTask: ITask = await resp.json();
-
-    setToast({
-      text: "New task added!",
-      color: "green-200",
-    });
-    addTask(newTask);
-    // setGlobalaTaskStore(null);
+    const newTask = await createTask();
+    if (newTask) {
+      setTasks((p) => [...p, newTask]);
+      setToast({
+        text: "New task added!",
+        color: "green-200",
+      });
+    } else {
+      setToast({
+        text: "Failed to craete new task",
+        color: "red-200",
+      });
+    }
   };
 
   useEffect(() => {
     (async () => {
-      try {
-        const resp = await fetch(baseUrl + "/api/task/all", {
-          method: "GET",
-          headers: headers,
-          credentials: "include",
-        });
-        const tasks = await resp.json();
-        if (tasks === false && resp.status === 401) {
-          navigateTo("/login", { replace: true });
-        }
-        setIsLoading(false);
-        setTasks(tasks);
-        // setGlobalaTaskStore(tasks);
-        console.log(`fetched all tasks`);
-      } catch (err) {
-        console.log(err);
-      }
+      setLoading(true);
+      const tasks = await fetchTasks();
+      setTasks(tasks);
+      setLoading(false);
     })();
   }, []);
 
-  const handleLogout = () => {
-    (async () => {
-      try {
-        await fetch(baseUrl + "/api/logout", {
-          method: "GET",
-          headers: headers,
-          credentials: "include",
-        });
-        navigateTo("/login", { replace: true });
-      } catch (err) {
-        console.error(err);
-      }
-    })();
+  const handleLogout = async () => {
+    await logout();
     setUser(null);
-  };
-
-  interface LoadingSpinnerProps {
-    loading: boolean;
-  }
-  const LoadingSpinner = ({ loading }: LoadingSpinnerProps) => {
-    return (
-      <div
-        className={`fixed top-0 left-0 w-full h-full flex justify-center items-center ${
-          loading ? "" : "hidden"
-        }`}
-      >
-        <MoonLoader color="#FAA0A0	" loading={loading} size={150} />
-      </div>
-    );
   };
 
   return (
@@ -118,8 +73,8 @@ export default function HomePage() {
         alt=""
         style={{ boxShadow: "1px 0.4px 4px 0.3px lightgreen" }}
       />
-      {isLoading ? (
-        <LoadingSpinner loading={Boolean(isLoading)} />
+      {loading ? (
+        <LoadingSpinner loading={Boolean(loading)} />
       ) : (
         <Board styleProps={DefaultBoardProps} />
       )}
