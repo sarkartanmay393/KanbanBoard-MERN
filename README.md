@@ -1,5 +1,8 @@
 <a name="readme-top"></a>
 
+<div style="display:flex;width:100vw;justify-content:center;">
+<h1>Updated version of this: <a href="https://github.com/sarkartanmay393/tsmk-dnd">Kanban Board: TSMK</a></h1>
+</div>
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
